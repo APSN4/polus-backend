@@ -42,10 +42,15 @@ func (u UserServiceImpl) UpdateUserData(c *gin.Context) {
 		pkg.PanicException(constant.DataNotFound)
 	}
 
-	data.RoleID = request.RoleID
+	data.Name = request.Name
+	data.Surname = request.Surname
+	data.UserStatusText = request.UserStatusText
+	data.PhotoUrl = request.PhotoUrl
+	data.DiaryID = request.DiaryID
 	data.Email = request.Email
-	data.Name = request.Password
+	data.Password = request.Password
 	data.Status = request.Status
+	data.RoleID = request.RoleID
 	u.userRepository.Save(&data)
 
 	if err != nil {

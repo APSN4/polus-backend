@@ -29,7 +29,19 @@ var roleRepoSet = wire.NewSet(repository.RoleRepositoryInit,
 	wire.Bind(new(repository.RoleRepository), new(*repository.RoleRepositoryImpl)),
 )
 
+var diaryServiceSet = wire.NewSet(service.DiaryServiceInit,
+	wire.Bind(new(service.DiaryService), new(*service.DiaryServiceImpl)),
+)
+
+var diaryRepoSet = wire.NewSet(repository.DiaryRepositoryInit,
+	wire.Bind(new(repository.DiaryRepository), new(*repository.DiaryRepositoryImpl)),
+)
+
+var diaryCtrlSet = wire.NewSet(controller.DiaryControllerInit,
+	wire.Bind(new(controller.DiaryController), new(*controller.DiaryControllerImpl)),
+)
+
 func Init() *Initialization {
-	wire.Build(NewInitialization, db, userCtrlSet, userServiceSet, userRepoSet, roleRepoSet)
+	wire.Build(NewInitialization, db, userCtrlSet, userServiceSet, userRepoSet, roleRepoSet, diaryRepoSet, diaryCtrlSet, diaryServiceSet)
 	return nil
 }

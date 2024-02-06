@@ -19,6 +19,13 @@ func Init(init *config.Initialization) *gin.Engine {
 		user.GET("/:userID", init.UserCtrl.GetUserById)
 		user.PUT("/:userID", init.UserCtrl.UpdateUserData)
 		user.DELETE("/:userID", init.UserCtrl.DeleteUser)
+
+		diary := api.Group("/diary")
+		diary.GET("", init.DiaryCtrl.GetAllDiaryData)
+		diary.POST("", init.DiaryCtrl.AddDiaryData)
+		diary.GET("/:diaryID", init.UserCtrl.GetUserById)
+		diary.PUT("/:diaryID", init.UserCtrl.UpdateUserData)
+		diary.DELETE("/:diaryID", init.UserCtrl.DeleteUser)
 	}
 
 	return router

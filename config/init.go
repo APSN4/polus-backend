@@ -7,20 +7,29 @@ import (
 )
 
 type Initialization struct {
-	userRepo repository.UserRepository
-	userSvc  service.UserService
-	UserCtrl controller.UserController
-	RoleRepo repository.RoleRepository
+	userRepo  repository.UserRepository
+	userSvc   service.UserService
+	UserCtrl  controller.UserController
+	RoleRepo  repository.RoleRepository
+	diaryRepo repository.DiaryRepository
+	diarySvc  service.DiaryService
+	DiaryCtrl controller.DiaryController
 }
 
 func NewInitialization(userRepo repository.UserRepository,
 	userService service.UserService,
 	userCtrl controller.UserController,
-	roleRepo repository.RoleRepository) *Initialization {
+	roleRepo repository.RoleRepository,
+	diaryRepo repository.DiaryRepository,
+	diarySvc service.DiaryService,
+	DiaryCtrl controller.DiaryController) *Initialization {
 	return &Initialization{
-		userRepo: userRepo,
-		userSvc:  userService,
-		UserCtrl: userCtrl,
-		RoleRepo: roleRepo,
+		userRepo:  userRepo,
+		userSvc:   userService,
+		UserCtrl:  userCtrl,
+		RoleRepo:  roleRepo,
+		diaryRepo: diaryRepo,
+		diarySvc:  diarySvc,
+		DiaryCtrl: DiaryCtrl,
 	}
 }

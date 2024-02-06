@@ -62,6 +62,12 @@ users
 CREATE TABLE IF NOT EXISTS users (
 id SERIAL PRIMARY KEY NOT NULL,
 name VARCHAR(255),
+surname VARCHAR(255),
+user_status_text TEXT,
+photo_url TEXT,
+diary_id INT,
+teachers_id INT[],
+reports_id INT,
 email VARCHAR(255),
 password VARCHAR(255) CHECK (password <> '') NOT NULL,
 status BIGINT,

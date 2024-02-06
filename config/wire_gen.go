@@ -21,7 +21,10 @@ func Init() *Initialization {
 	userServiceImpl := service.UserServiceInit(userRepositoryImpl)
 	userControllerImpl := controller.UserControllerInit(userServiceImpl)
 	roleRepositoryImpl := repository.RoleRepositoryInit(gormDB)
-	initialization := NewInitialization(userRepositoryImpl, userServiceImpl, userControllerImpl, roleRepositoryImpl)
+	diaryRepositoryImpl := repository.DiaryRepositoryInit(gormDB)
+	diaryServiceImpl := service.DiaryServiceInit(diaryRepositoryImpl)
+	diaryControllerImpl := controller.DiaryControllerInit(diaryServiceImpl)
+	initialization := NewInitialization(userRepositoryImpl, userServiceImpl, userControllerImpl, roleRepositoryImpl, diaryRepositoryImpl, diaryServiceImpl, diaryControllerImpl)
 	return initialization
 }
 
@@ -36,3 +39,9 @@ var userRepoSet = wire.NewSet(repository.UserRepositoryInit, wire.Bind(new(repos
 var userCtrlSet = wire.NewSet(controller.UserControllerInit, wire.Bind(new(controller.UserController), new(*controller.UserControllerImpl)))
 
 var roleRepoSet = wire.NewSet(repository.RoleRepositoryInit, wire.Bind(new(repository.RoleRepository), new(*repository.RoleRepositoryImpl)))
+
+var diaryServiceSet = wire.NewSet(service.DiaryServiceInit, wire.Bind(new(service.DiaryService), new(*service.DiaryServiceImpl)))
+
+var diaryRepoSet = wire.NewSet(repository.DiaryRepositoryInit, wire.Bind(new(repository.DiaryRepository), new(*repository.DiaryRepositoryImpl)))
+
+var diaryCtrlSet = wire.NewSet(controller.DiaryControllerInit, wire.Bind(new(controller.DiaryController), new(*controller.DiaryControllerImpl)))
