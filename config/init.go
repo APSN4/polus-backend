@@ -14,6 +14,9 @@ type Initialization struct {
 	diaryRepo repository.DiaryRepository
 	diarySvc  service.DiaryService
 	DiaryCtrl controller.DiaryController
+	noteRepo  repository.NoteRepository
+	noteSvc   service.NoteService
+	NoteCtrl  controller.NoteController
 }
 
 func NewInitialization(userRepo repository.UserRepository,
@@ -22,7 +25,10 @@ func NewInitialization(userRepo repository.UserRepository,
 	roleRepo repository.RoleRepository,
 	diaryRepo repository.DiaryRepository,
 	diarySvc service.DiaryService,
-	DiaryCtrl controller.DiaryController) *Initialization {
+	DiaryCtrl controller.DiaryController,
+	noteRepo repository.NoteRepository,
+	noteSvc service.NoteService,
+	NoteCtrl controller.NoteController) *Initialization {
 	return &Initialization{
 		userRepo:  userRepo,
 		userSvc:   userService,
@@ -31,5 +37,8 @@ func NewInitialization(userRepo repository.UserRepository,
 		diaryRepo: diaryRepo,
 		diarySvc:  diarySvc,
 		DiaryCtrl: DiaryCtrl,
+		noteRepo:  noteRepo,
+		noteSvc:   noteSvc,
+		NoteCtrl:  NoteCtrl,
 	}
 }

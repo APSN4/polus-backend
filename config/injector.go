@@ -41,7 +41,19 @@ var diaryCtrlSet = wire.NewSet(controller.DiaryControllerInit,
 	wire.Bind(new(controller.DiaryController), new(*controller.DiaryControllerImpl)),
 )
 
+var noteServiceSet = wire.NewSet(service.NoteServiceInit,
+	wire.Bind(new(service.NoteService), new(*service.NoteServiceImpl)),
+)
+
+var noteRepoSet = wire.NewSet(repository.NoteRepositoryInit,
+	wire.Bind(new(repository.NoteRepository), new(*repository.NoteRepositoryImpl)),
+)
+
+var noteCtrlSet = wire.NewSet(controller.NoteControllerInit,
+	wire.Bind(new(controller.NoteController), new(*controller.NoteControllerImpl)),
+)
+
 func Init() *Initialization {
-	wire.Build(NewInitialization, db, userCtrlSet, userServiceSet, userRepoSet, roleRepoSet, diaryRepoSet, diaryCtrlSet, diaryServiceSet)
+	wire.Build(NewInitialization, db, userCtrlSet, userServiceSet, userRepoSet, roleRepoSet, diaryRepoSet, diaryCtrlSet, diaryServiceSet, noteRepoSet, noteServiceSet, noteCtrlSet)
 	return nil
 }
