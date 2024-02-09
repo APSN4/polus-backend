@@ -41,7 +41,16 @@ func (u NoteServiceImpl) UpdateNoteData(c *gin.Context) {
 		pkg.PanicException(constant.DataNotFound)
 	}
 
-	// data.Name = request.Name
+	data.UserID = request.UserID
+	data.DiaryID = request.DiaryID
+	data.PhotoCloudsUrl = request.PhotoCloudsUrl
+	data.NatureEvents = request.NatureEvents
+	data.Temperature = request.Temperature
+	data.Supplement = request.Supplement
+	data.LocationX = request.LocationX
+	data.LocationY = request.LocationY
+	data.AddressText = request.AddressText
+	data.UpdatedAt = request.UpdatedAt
 	u.noteRepository.Save(&data)
 
 	if err != nil {

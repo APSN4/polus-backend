@@ -9,6 +9,7 @@ import (
 	"polus-backend/app/pkg"
 	"polus-backend/app/repository"
 	"strconv"
+	"time"
 )
 
 type DiaryService interface {
@@ -41,6 +42,8 @@ func (u DiaryServiceImpl) UpdateDiaryData(c *gin.Context) {
 		pkg.PanicException(constant.DataNotFound)
 	}
 
+	data.NotesID = request.NotesID
+	data.UpdatedAt = time.Now()
 	u.diaryRepository.Save(&data)
 
 	if err != nil {

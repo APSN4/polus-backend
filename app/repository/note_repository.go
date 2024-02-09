@@ -20,7 +20,7 @@ type NoteRepositoryImpl struct {
 func (d NoteRepositoryImpl) FindAllNote() ([]dao.Note, error) {
 	var note []dao.Note
 
-	var err = d.db.Find(&note).Error // Preload("Note")
+	var err = d.db.Find(&note).Error // Preload("Diary")
 	if err != nil {
 		log.Error("Got an error finding all couples. Error: ", err)
 		return nil, err
