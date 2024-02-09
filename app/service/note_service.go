@@ -9,6 +9,7 @@ import (
 	"polus-backend/app/pkg"
 	"polus-backend/app/repository"
 	"strconv"
+	"time"
 )
 
 type NoteService interface {
@@ -50,7 +51,7 @@ func (u NoteServiceImpl) UpdateNoteData(c *gin.Context) {
 	data.LocationX = request.LocationX
 	data.LocationY = request.LocationY
 	data.AddressText = request.AddressText
-	data.UpdatedAt = request.UpdatedAt
+	data.UpdatedAt = time.Now()
 	u.noteRepository.Save(&data)
 
 	if err != nil {

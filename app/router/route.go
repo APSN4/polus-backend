@@ -20,6 +20,9 @@ func Init(init *config.Initialization) *gin.Engine {
 		user.PUT("/:userID", init.UserCtrl.UpdateUserData)
 		user.DELETE("/:userID", init.UserCtrl.DeleteUser)
 
+		userComponents := api.Group("/component")
+		userComponents.GET("/:userID", init.UserCtrl.UpdateComponentUserData)
+
 		diary := api.Group("/diary")
 		diary.GET("", init.DiaryCtrl.GetAllDiaryData)
 		diary.POST("", init.DiaryCtrl.AddDiaryData)

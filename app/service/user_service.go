@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -9,7 +10,9 @@ import (
 	"polus-backend/app/domain/dao"
 	"polus-backend/app/pkg"
 	"polus-backend/app/repository"
+	"reflect"
 	"strconv"
+	"time"
 )
 
 type UserService interface {
@@ -17,6 +20,7 @@ type UserService interface {
 	GetUserById(c *gin.Context)
 	AddUserData(c *gin.Context)
 	UpdateUserData(c *gin.Context)
+	UpdateComponentUserData(c *gin.Context)
 	DeleteUser(c *gin.Context)
 }
 
@@ -51,11 +55,38 @@ func (u UserServiceImpl) UpdateUserData(c *gin.Context) {
 	data.Password = request.Password
 	data.Status = request.Status
 	data.RoleID = request.RoleID
+	data.UpdatedAt = time.Now()
 	u.userRepository.Save(&data)
 
 	if err != nil {
 		log.Error("Happened error when updating data to database. Error", err)
 		pkg.PanicException(constant.UnknownError)
+	}
+
+	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, data))
+}
+
+func (u UserServiceImpl) UpdateComponentUserData(c *gin.Context) {
+	defer pkg.PanicHandler(c)
+
+	log.Info("start to update component current user by id")
+	userID, _ := strconv.Atoi(c.Param("userID"))
+
+	data, err := u.userRepository.FindUserById(userID)
+	if err != nil {
+		log.Error("Happened error when get data from database. Error", err)
+		pkg.PanicException(constant.DataNotFound)
+	}
+
+	var request dao.User
+	if err := c.ShouldBindJSON(&request); err != nil {
+		log.Error("Happened error when mapping request from FE. Error", err)
+		pkg.PanicException(constant.InvalidRequest)
+	}
+
+	fields := reflect.VisibleFields(reflect.TypeOf(request))
+	for _, field := range fields {
+		fmt.Printf("Key: %s\tType: %s\n", field.Name, field.Type)
 	}
 
 	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, data))

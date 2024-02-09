@@ -10,6 +10,7 @@ type UserController interface {
 	AddUserData(c *gin.Context)
 	GetUserById(c *gin.Context)
 	UpdateUserData(c *gin.Context)
+	UpdateComponentUserData(c *gin.Context)
 	DeleteUser(c *gin.Context)
 }
 
@@ -31,6 +32,10 @@ func (u UserControllerImpl) GetUserById(c *gin.Context) {
 
 func (u UserControllerImpl) UpdateUserData(c *gin.Context) {
 	u.svc.UpdateUserData(c)
+}
+
+func (u UserControllerImpl) UpdateComponentUserData(c *gin.Context) {
+	u.svc.UpdateComponentUserData(c)
 }
 
 func (u UserControllerImpl) DeleteUser(c *gin.Context) {
