@@ -25,7 +25,8 @@ type UserService interface {
 }
 
 type UserServiceImpl struct {
-	userRepository repository.UserRepository
+	userRepository  repository.UserRepository
+	diaryRepository repository.DiaryRepository
 }
 
 func (u UserServiceImpl) UpdateUserData(c *gin.Context) {
@@ -117,8 +118,16 @@ func (u UserServiceImpl) AddUserData(c *gin.Context) {
 		pkg.PanicException(constant.InvalidRequest)
 	}
 
+	var requestD dao.Diary
+	dataD, err := u.diaryRepository.Save(&requestD) // Debug: diaryRepository nil
+	if err != nil {
+		log.Error("Happened error when saving data to database. Error", err)
+		pkg.PanicException(constant.UnknownError)
+	}
+
 	hash, _ := bcrypt.GenerateFromPassword([]byte(request.Password), 15)
 	request.Password = string(hash)
+	request.DiaryID = dataD.ID
 
 	data, err := u.userRepository.Save(&request)
 	if err != nil {
