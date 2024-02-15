@@ -15,7 +15,7 @@ import (
 type DiaryService interface {
 	GetAllDiary(c *gin.Context)
 	GetDiaryById(c *gin.Context)
-	AddDiaryData(c *gin.Context)
+	AddDiaryData(c *gin.Context) (interface{}, error)
 	UpdateDiaryData(c *gin.Context)
 	DeleteDiary(c *gin.Context)
 }
@@ -69,23 +69,22 @@ func (u DiaryServiceImpl) GetDiaryById(c *gin.Context) {
 	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, data))
 }
 
-func (u DiaryServiceImpl) AddDiaryData(c *gin.Context) {
+func (u DiaryServiceImpl) AddDiaryData(c *gin.Context) (interface{}, error) {
 	defer pkg.PanicHandler(c)
 
 	log.Info("start to execute program add data diary")
 	var request dao.Diary
-	if err := c.ShouldBindJSON(&request); err != nil {
-		log.Error("Happened error when mapping request from FE. Error", err)
-		pkg.PanicException(constant.InvalidRequest)
-	}
+	request.NotesID = []int{}
+	request.Notes = []*dao.Note{}
 
-	data, err := u.diaryRepository.Save(&request)
+	data, err := u.diaryRepository.Save(&request) // error
 	if err != nil {
 		log.Error("Happened error when saving data to database. Error", err)
 		pkg.PanicException(constant.UnknownError)
 	}
 
 	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, data))
+	return data, err
 }
 
 func (u DiaryServiceImpl) GetAllDiary(c *gin.Context) {
