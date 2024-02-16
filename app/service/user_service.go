@@ -119,11 +119,11 @@ func (u UserServiceImpl) AddUserData(c *gin.Context) {
 	}
 
 	dataDiary, err := u.diaryService.AddDiaryData(c)
-	log.Error(dataDiary, err)
 
 	hash, _ := bcrypt.GenerateFromPassword([]byte(request.Password), 15)
 	request.Password = string(hash)
 	request.DiaryID = dataDiary.ID
+	request.CreatedAt = time.Now()
 
 	data, err := u.userRepository.Save(&request)
 	if err != nil {
@@ -163,8 +163,9 @@ func (u UserServiceImpl) DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, pkg.Null()))
 }
 
-func UserServiceInit(userRepository repository.UserRepository) *UserServiceImpl {
+func UserServiceInit(userRepository repository.UserRepository, diaryService DiaryService) *UserServiceImpl {
 	return &UserServiceImpl{
 		userRepository: userRepository,
+		diaryService:   diaryService,
 	}
 }

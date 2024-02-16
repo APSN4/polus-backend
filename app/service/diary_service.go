@@ -76,6 +76,7 @@ func (u DiaryServiceImpl) AddDiaryData(c *gin.Context) (dao.Diary, error) {
 	var request dao.Diary
 	request.NotesID = []int{}
 	request.Notes = []dao.Note{}
+	request.CreatedAt = time.Now()
 
 	data, err := u.diaryRepository.Save(&request)
 	if err != nil {
