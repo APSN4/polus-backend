@@ -15,7 +15,7 @@ import (
 type DiaryService interface {
 	GetAllDiary(c *gin.Context)
 	GetDiaryById(c *gin.Context)
-	AddDiaryData(c *gin.Context) (interface{}, error)
+	AddDiaryData(c *gin.Context) (dao.Diary, error)
 	UpdateDiaryData(c *gin.Context)
 	DeleteDiary(c *gin.Context)
 }
@@ -69,15 +69,15 @@ func (u DiaryServiceImpl) GetDiaryById(c *gin.Context) {
 	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, data))
 }
 
-func (u DiaryServiceImpl) AddDiaryData(c *gin.Context) (interface{}, error) {
+func (u DiaryServiceImpl) AddDiaryData(c *gin.Context) (dao.Diary, error) {
 	defer pkg.PanicHandler(c)
 
 	log.Info("start to execute program add data diary")
 	var request dao.Diary
 	request.NotesID = []int{}
-	request.Notes = []*dao.Note{}
+	request.Notes = []dao.Note{}
 
-	data, err := u.diaryRepository.Save(&request) // error
+	data, err := u.diaryRepository.Save(&request)
 	if err != nil {
 		log.Error("Happened error when saving data to database. Error", err)
 		pkg.PanicException(constant.UnknownError)

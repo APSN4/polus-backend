@@ -7,7 +7,7 @@ type User struct {
 	UserStatusText  string `gorm:"column:user_status_text" json:"user_status_text"`
 	PhotoUrl        string `gorm:"column:photo_url" json:"photo_url"`
 	DiaryID         int    `gorm:"column:diary_id" json:"diary_id"`
-	Diary           Diary  `gorm:"foreignKey:DiaryID;references:ID" json:"diary"`
+	Diary           *Diary `gorm:"foreignKey:DiaryID;references:ID" json:"diary"`
 	DiaryStudentsID []int  `gorm:"column:diary_students_id; type:int[]" json:"diary_students_id"`
 	TeachersID      []int  `gorm:"column:teachers_id; type:int[]" json:"teachers_id"`
 	NotesID         []int  `gorm:"column:reports_id; type:int[]" json:"reports_id"`
