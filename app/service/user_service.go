@@ -1,17 +1,22 @@
 package service
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+	"io"
 	"net/http"
+	"os"
 	"polus-backend/app/constant"
 	"polus-backend/app/domain/dao"
 	"polus-backend/app/pkg"
 	"polus-backend/app/repository"
 	"reflect"
 	"strconv"
+	"syscall"
 	"time"
 )
 
@@ -22,6 +27,7 @@ type UserService interface {
 	UpdateUserData(c *gin.Context)
 	UpdateComponentUserData(c *gin.Context)
 	DeleteUser(c *gin.Context)
+	UploadPhotoUser(c *gin.Context)
 }
 
 type UserServiceImpl struct {
@@ -161,6 +167,47 @@ func (u UserServiceImpl) DeleteUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, pkg.BuildResponse(constant.Success, pkg.Null()))
+}
+
+func (u UserServiceImpl) UploadPhotoUser(c *gin.Context) {
+	defer pkg.PanicHandler(c)
+
+	log.Info("start upload photo by user id")
+	file, header, err := c.Request.FormFile("file")
+	if err != nil {
+		log.Error("Happened Error when try get file. Error:", err)
+		pkg.PanicException(constant.UnknownError)
+	}
+
+	err = os.Mkdir("photo_users", os.ModeDir)
+	if err != nil && errors.Is(err, syscall.ERROR_ALREADY_EXISTS) {
+		log.Info("Directory 'photo_users' has already exists")
+	}
+	if err != nil && !errors.Is(err, syscall.ERROR_ALREADY_EXISTS) {
+		log.Error("Happened Error when try create folder. Error:", err)
+		pkg.PanicException(constant.UnknownError)
+	}
+
+	userID, _ := strconv.Atoi(c.Param("userID"))
+	defer file.Close()
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file); err != nil {
+		log.Error("Happened Error when try create buf. Error:", err)
+		pkg.PanicException(constant.UnknownError)
+	}
+	err = os.WriteFile("photo_users/"+strconv.Itoa(userID)+"_"+header.Filename, buf.Bytes(), 0660)
+	if err != nil {
+		log.Error("Happened Error when try save file. Error:", err)
+		pkg.PanicException(constant.UnknownError)
+	}
+
+	type data struct {
+		Filename string `json:"filename"`
+	}
+
+	dataOutput := data{Filename: strconv.Itoa(userID) + "_" + header.Filename}
+
+	c.JSON(http.StatusCreated, pkg.BuildResponse(constant.Success, dataOutput))
 }
 
 func UserServiceInit(userRepository repository.UserRepository, diaryService DiaryService) *UserServiceImpl {

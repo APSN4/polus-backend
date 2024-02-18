@@ -20,6 +20,9 @@ func Init(init *config.Initialization) *gin.Engine {
 		user.PUT("/:userID", init.UserCtrl.UpdateUserData)
 		user.DELETE("/:userID", init.UserCtrl.DeleteUser)
 
+		userPhoto := api.Group("/photo")
+		userPhoto.POST("/:userID", init.UserCtrl.UploadPhotoUser)
+
 		userComponents := api.Group("/component")
 		userComponents.GET("/:userID", init.UserCtrl.UpdateComponentUserData)
 

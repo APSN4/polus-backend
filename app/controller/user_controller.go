@@ -12,6 +12,7 @@ type UserController interface {
 	UpdateUserData(c *gin.Context)
 	UpdateComponentUserData(c *gin.Context)
 	DeleteUser(c *gin.Context)
+	UploadPhotoUser(c *gin.Context)
 }
 
 type UserControllerImpl struct {
@@ -40,6 +41,10 @@ func (u UserControllerImpl) UpdateComponentUserData(c *gin.Context) {
 
 func (u UserControllerImpl) DeleteUser(c *gin.Context) {
 	u.svc.DeleteUser(c)
+}
+
+func (u UserControllerImpl) UploadPhotoUser(c *gin.Context) {
+	u.svc.UploadPhotoUser(c)
 }
 
 func UserControllerInit(userService service.UserService) *UserControllerImpl {
