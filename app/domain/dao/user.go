@@ -10,7 +10,7 @@ type User struct {
 	Diary           *Diary `gorm:"foreignKey:DiaryID;references:ID" json:"diary"`
 	DiaryStudentsID []int  `gorm:"column:diary_students_id; type:int[]" json:"diary_students_id"`
 	TeachersID      []int  `gorm:"column:teachers_id; type:int[]" json:"teachers_id"`
-	NotesID         []int  `gorm:"column:reports_id; type:int[]" json:"reports_id"`
+	NotesID         []int  `gorm:"column:notes_id; type:int[]" json:"notes_id"`
 	Notes           []Note `gorm:"foreignKey:UserID" json:"notes"`
 	Email           string `gorm:"column:email" json:"email"`
 	Password        string `gorm:"column:password" json:"password"`
