@@ -16,7 +16,6 @@ import (
 	"polus-backend/app/repository"
 	"reflect"
 	"strconv"
-	"syscall"
 	"time"
 )
 
@@ -179,11 +178,11 @@ func (u UserServiceImpl) UploadPhotoUser(c *gin.Context) {
 		pkg.PanicException(constant.UnknownError)
 	}
 
-	err = os.Mkdir("photo_users", os.ModeDir)
-	if err != nil && errors.Is(err, syscall.ERROR_ALREADY_EXISTS) {
+	err = os.Mkdir("photo_users", 0700)
+	if err != nil && errors.Is(err, os.ErrExist) {
 		log.Info("Directory 'photo_users' has already exists")
 	}
-	if err != nil && !errors.Is(err, syscall.ERROR_ALREADY_EXISTS) {
+	if err != nil && !errors.Is(err, os.ErrExist) {
 		log.Error("Happened Error when try create folder. Error:", err)
 		pkg.PanicException(constant.UnknownError)
 	}
